@@ -6,11 +6,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import com.api.model.Employee;
 import com.api.repository.EmployeeRepository;
 
 @SpringBootApplication
+@EnableWebSecurity
 public class EmployeesApplication {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmployeesApplication.class);

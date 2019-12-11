@@ -3,6 +3,8 @@ package com.api.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,16 @@ public class EmployeeServiceImplementation implements EmployeeService {
 	@Override
 	public List<Employee> getAllEmployees() {
 		return employeeRepository.findAll();
+	}
+
+	@Override
+	public Employee addEmployee(@Valid Employee employee) {
+		return employeeRepository.save(employee);
+	}
+	
+	@Override
+	public Employee updateEmployee(Employee employee) {
+		return employeeRepository.save(employee);
 	}
 	
 }
