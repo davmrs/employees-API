@@ -2,8 +2,12 @@ package com.api.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +29,27 @@ public class EmployeeController {
 	
     @GetMapping(path = "/employees")
     public List<Employee> getEmployees() {
-		return employeeService.getAllEmployees();
+    	
+    	List<Employee> employees = employeeService.getAllEmployees();
+    	Predicate<Employee> isActive = employee -> employee.isActive() != false;
+
+    	List<Employee> activeEmployees = employees.stream().filter(isActive)
+                .collect(Collectors.toList());
+    	
+		return activeEmployees;
 	}
 
     @GetMapping(path = "/employees/{id}")
-    public Optional<Employee> getEmployee(@PathVariable("id") long id) {
-		return employeeService.getEmployeeById(id);
+    public ResponseEntity<Employee> getEmployee(@PathVariable("id") long id) {
+    	
+    	Optional<Employee> previousEmployee = employeeService.getEmployeeById(id);
+    	Employee currentEmployee = previousEmployee.get();
+    	
+    	if (currentEmployee.isActive() == false) {
+    		return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+    	}
+    	
+		return new ResponseEntity<Employee>(currentEmployee, HttpStatus.OK);
 	}
     
     @PostMapping(path = "/employees")
