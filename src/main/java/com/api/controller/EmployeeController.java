@@ -43,6 +43,10 @@ public class EmployeeController {
     public ResponseEntity<Employee> getEmployee(@PathVariable("id") long id) {
     	
     	Optional<Employee> previousEmployee = employeeService.getEmployeeById(id);
+    	if (previousEmployee.isPresent() == false) {
+    		return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+        }
+    	
     	Employee currentEmployee = previousEmployee.get();
     	
     	if (currentEmployee.isActive() == false) {
@@ -61,9 +65,13 @@ public class EmployeeController {
     }
     
     @PutMapping(path = "/employees/{id}")
-    public Employee updateEmployee(@PathVariable("id") long id, @RequestBody Employee employee) {
+    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") long id, @RequestBody Employee employee) {
     	 
     	Optional<Employee> previousEmployee = employeeService.getEmployeeById(id);
+    	if (previousEmployee.isPresent() == false) {
+    		return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+        }
+    	
     	Employee currentEmployee = previousEmployee.get();
  
     	if (employee.getFirstName() != null) {
@@ -88,19 +96,25 @@ public class EmployeeController {
         	currentEmployee.setDateEmployment(employee.getDateEmployment());
 
     	}
- 
-    	return employeeService.updateEmployee(currentEmployee);
+    	
+    	employeeService.updateEmployee(currentEmployee);
+    	
+    	return new ResponseEntity<Employee>(currentEmployee, HttpStatus.OK);
     }
     
-    @DeleteMapping("/employees/{id}")
-    public Employee deleteEmployee(@PathVariable("id") long id) {
+    @DeleteMapping(path = "/employees/{id}")
+    public ResponseEntity<Employee> deleteEmployee(@PathVariable("id") long id) {
     	 
     	Optional<Employee> previousEmployee = employeeService.getEmployeeById(id);
+    	if (previousEmployee.isPresent() == false) {
+    		return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+        }
+    	
     	Employee currentEmployee = previousEmployee.get();
- 
     	currentEmployee.setActive(false);
+    	employeeService.updateEmployee(currentEmployee);
  
-    	return employeeService.updateEmployee(currentEmployee);
+    	return new ResponseEntity<Employee>(currentEmployee, HttpStatus.OK);
     }
     
 }

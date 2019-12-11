@@ -1,5 +1,8 @@
 package com.api;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +19,14 @@ import com.api.repository.EmployeeRepository;
 public class EmployeesApplication {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmployeesApplication.class);
+	
+	private static final List<Employee> initialEmployees = Arrays.
+			asList(
+					new Employee("David", "S", "Mora", "22081991", "20092015", true),
+					new Employee("Juan", "A", "Guevara", "03091978", "15032017", true),
+					new Employee("Luis ", "R", "Pérez", "19031985", "10012015", false),
+					new Employee("Fernando", "J", "Trinidad", "28121990", "05042018", true)
+					);
 
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeesApplication.class, args);
@@ -24,10 +35,8 @@ public class EmployeesApplication {
 	@Bean
 	public CommandLineRunner setup(EmployeeRepository employeeRepository) {
 		return (args) -> {
-			employeeRepository.save(new Employee("David", "S", "Mora", "22081991", "20092015", true));
-			employeeRepository.save(new Employee("Juan", "A", "Guevara", "03091978", "15032017", true));
-			employeeRepository.save(new Employee("Luis ", "R", "Pérez", "19031985", "10012015", false));
-			employeeRepository.save(new Employee("Fernando", "J", "Trinidad", "28121990", "05042018", true));
+			initialEmployees.stream()
+				.forEach(employee -> employeeRepository.save(employee));
 			logger.info("The sample data has been generated");
 		};
 	}
