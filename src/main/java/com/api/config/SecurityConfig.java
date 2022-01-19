@@ -7,10 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
-		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/v1/employees/**").fullyAuthenticated().and().httpBasic();
-	}
-	
+
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/v1/employees/**").fullyAuthenticated().and().httpBasic();
+    }
+
 }
