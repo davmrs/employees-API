@@ -3,26 +3,23 @@ package com.api.pojo;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Employee {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
     private String firstName;
     private String middleInitial;
     private String lastName;
-    private String dateBirth;
-    private String dateEmployment;
+    private LocalDate dateBirth;
+    private LocalDate dateEmployment;
     private boolean active;
 
-    public Employee() {
-        super();
-    }
-
-    public Employee(String firstName, String middleInitial, String lastName, String dateBirth, String dateEmployment, boolean active) {
-        super();
+    public Employee(long id, String firstName, String middleInitial, String lastName, LocalDate dateBirth, LocalDate dateEmployment, boolean active) {
+        this.id = id;
         this.firstName = firstName;
         this.middleInitial = middleInitial;
         this.lastName = lastName;
@@ -31,12 +28,11 @@ public class Employee {
         this.active = active;
     }
 
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -64,19 +60,19 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public String getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 
-    public void setDateBirth(String dateBirth) {
+    public void setDateBirth(LocalDate dateBirth) {
         this.dateBirth = dateBirth;
     }
 
-    public String getDateEmployment() {
+    public LocalDate getDateEmployment() {
         return dateEmployment;
     }
 
-    public void setDateEmployment(String dateEmployment) {
+    public void setDateEmployment(LocalDate dateEmployment) {
         this.dateEmployment = dateEmployment;
     }
 

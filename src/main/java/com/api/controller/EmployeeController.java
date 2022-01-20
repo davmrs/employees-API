@@ -16,7 +16,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping(path = "/employees")
-    public List<Employee> getEmployees() {
+    public ResponseEntity<List<Employee>> getEmployees() {
         return employeeService.getActiveEmployees();
     }
 
@@ -26,7 +26,7 @@ public class EmployeeController {
     }
 
     @PostMapping(path = "/employees")
-    public Employee addEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
         return employeeService.addEmployee(employee);
     }
 

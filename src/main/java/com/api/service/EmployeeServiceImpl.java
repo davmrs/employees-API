@@ -19,16 +19,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     EmployeeRepository employeeRepository;
 
     @Override
-    public List<Employee> getActiveEmployees() {
-        return employeeRepository.findAll().stream()
+    public ResponseEntity<List<Employee>> getActiveEmployees() {
+        List<Employee> activeEmployees = employeeRepository.findAll().stream()
                 .filter(Employee::isActive)
                 .collect(Collectors.toList());
+
+        return new ResponseEntity<>(activeEmployees, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Employee> getEmployeeById(long id) {
         Optional<Employee> previousEmployee = employeeRepository.findById(id);
-        if (!previousEmployee.isPresent()) {
+        if (previousEmployee.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -42,15 +44,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee addEmployee(@Valid Employee employee) {
-        employee.setActive(true);
-        return employeeRepository.save(employee);
+    public ResponseEntity<Employee> addEmployee(@Valid Employee employee) {
+        employeeRepository.save(employee);
+        return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Employee> updateEmployee(long id, Employee employee) {
+    public ResponseEntity<Employee> updateEmployee(long id, @Valid Employee employee) {
         Optional<Employee> previousEmployee = employeeRepository.findById(id);
-        if (!previousEmployee.isPresent()) {
+        if (previousEmployee.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -87,14 +89,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public ResponseEntity<Employee> deleteEmployee(long id) {
         Optional<Employee> previousEmployee = employeeRepository.findById(id);
-        if (!previousEmployee.isPresent()) {
+        if (previousEmployee.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Employee currentEmployee = previousEmployee.get();
-        currentEmployee.setActive(false);
-        employeeRepository.save(currentEmployee);
+        employeeRepository.delete(id);
 
-        return new ResponseEntity<>(currentEmployee, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

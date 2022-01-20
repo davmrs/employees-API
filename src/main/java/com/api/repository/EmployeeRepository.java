@@ -1,10 +1,17 @@
 package com.api.repository;
 
 import com.api.pojo.Employee;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository("employeeRepository")
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface EmployeeRepository {
+
+    List<Employee> findAll();
+
+    Optional<Employee> findById(long id);
+
+    void save(Employee employee);
+
+    void delete(long id);
 }
